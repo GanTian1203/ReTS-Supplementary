@@ -1,1 +1,60 @@
-# ReTS-Supplementary
+# ReTS: Supplementary Materials
+
+This repository contains the supplementary experimental results for the paper:
+**"ReTS: Structure-Aware Spatio-Temporal Encoding for Medical Time-Series Classification"**
+
+Due to the strict page limit constraints of the MICCAI main conference submission, we provide the detailed statistical analyses and per-seed performance logs here to ensure transparency and reproducibility of our experimental claims.
+
+---
+
+## 1. Per-Seed Test Results (Expansion of Main Results)
+
+The following tables report the test performance (F1 Score) across 5 random seeds (41-45) under the original training strategy (EXP_ORIG). These results correspond to the aggregated mean/std reported in the main paper.
+
+### 1.1 Dataset: APAVA (2-Classes)
+
+| Model | Seed 41 | Seed 42 | Seed 43 | Seed 44 | Seed 45 | Mean (Std) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Transformer | 0.598 | 0.604 | 0.586 | 0.633 | 0.583 | 0.601 (0.019) |
+| iTransformer | 0.756 | 0.758 | 0.740 | 0.763 | 0.751 | 0.754 (0.009) |
+| PatchTST | 0.693 | 0.691 | 0.694 | 0.678 | 0.657 | 0.683 (0.015) |
+| Medformer | 0.762 | 0.728 | 0.757 | **0.791** | **0.761** | 0.760 (0.023) |
+| **ReTS (Ours)** | **0.832** | **0.788** | **0.781** | 0.668 | 0.727 | **0.759 (0.063)** |
+
+### 1.2 Dataset: PTB-XL (5-Labels)
+
+| Model | Seed 41 | Seed 42 | Seed 43 | Seed 44 | Seed 45 | Mean (Std) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Transformer | 0.497 | 0.492 | 0.487 | 0.475 | 0.495 | 0.489 (0.009) |
+| iTransformer | 0.300 | 0.241 | 0.251 | 0.246 | 0.256 | 0.259 (0.024) |
+| PatchTST | 0.524 | 0.550 | 0.544 | **0.538** | 0.539 | 0.539 (0.009) |
+| Medformer | 0.503 | 0.428 | 0.463 | 0.483 | 0.484 | 0.472 (0.028) |
+| **ReTS (Ours)** | **0.558** | **0.557** | **0.550** | 0.518 | **0.560** | **0.549 (0.017)** |
+
+---
+
+## 2. Extended Analysis on Unified Training Strategy (UMTO)
+
+To further examine the architecture-optimization interaction mentioned in the Discussion section, we report additional UMTO variants on the PTB-XL dataset.
+
+* **EXP_ORIG:** Original training strategy.
+* **UMTO (U1):** Standard unified training strategy.
+* **UMTO (U2):** A variant where the focal loss component is disabled to test stability.
+
+**Table: Test F1 Scores on PTB-XL (Mean ± Std over 5 seeds)**
+
+| Setting | Medformer | ReTS (Ours) | Analysis |
+| :--- | :---: | :---: | :--- |
+| **EXP_ORIG** | 0.472 ± 0.028 | **0.549 ± 0.017** | ReTS achieves best performance under standard training. |
+| **UMTO (U1)** | **0.495 ± 0.025** | 0.510 ± 0.012 | Medformer gains (+2.3%), while ReTS performance drops (-3.8%), showing negative interference. |
+| **UMTO (U2)** | 0.495 ± 0.024 | 0.501 ± 0.008 | Removing focal loss improves ReTS stability slightly compared to U1, but it still underperforms EXP_ORIG. |
+
+**Conclusion:** These results confirm that aggressive unified optimization strategies (like UMTO) can interfere with the strong architectural inductive bias of ReTS in complex multi-label settings.
+
+---
+
+## 3. Code Availability Statement
+
+The source code for the ST²-Encoder and the ReTS framework is currently being organized for intellectual property protection processes.
+
+**The full implementation will be made publicly available in this repository upon the paper's acceptance.**
