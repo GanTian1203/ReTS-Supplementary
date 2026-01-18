@@ -1,9 +1,9 @@
 # ReTS: Supplementary Materials
 
-This repository contains the supplementary experimental results for the paper:
+This repository contains the supplementary experimental results and analyses for the paper:
 **"ReTS: Structure-Aware Spatio-Temporal Encoding for Medical Time-Series Classification"**
 
-Due to the strict page limit constraints of the MICCAI main conference submission, we provide the detailed statistical analyses and per-seed performance logs here to ensure transparency and reproducibility of our experimental claims.
+Due to the strict page limit constraints of the MICCAI main conference submission, we provide detailed statistical analyses, sensitivity studies, and per-seed performance logs here to ensure transparency and reproducibility.
 
 ---
 
@@ -33,7 +33,33 @@ The following tables report the test performance (F1 Score) across 5 random seed
 
 ---
 
-## 2. Extended Analysis on Unified Training Strategy (UMTO)
+## 2. Sensitivity Analysis on Structural Hyperparameters
+
+As discussed in the **Implementation Details** and **Discussion** sections of the main paper, we investigate the sensitivity of ReTS to the physiological period ($P$) and local window size ($w$).
+
+### 2.1 Impact of Period ($P$)
+We varied the period $P$ around the dataset-specific average (0.8s).
+![Sensitivity P](supp_fig1_sensitivity_P.png)
+*Observation: ReTS maintains robust performance around the physiological average, showing tolerance to minor hyperparameters deviations.*
+
+### 2.2 Impact of Local Window ($w$)
+We tested various window sizes relative to the maximum beat deviation.
+![Sensitivity w](supp_fig2_sensitivity_w.png)
+*Observation: A window of $1.5\times$ offers the best trade-off, validating our design choice to accommodate Heart Rate Variability (HRV).*
+
+---
+
+## 3. Subgroup Analysis: Robustness to Arrhythmia
+
+To validate the claim that ReTS handles irregular heartbeats better than generic Transformers, we split the PTB-XL test set into **Sinus Rhythm (Normal)** and **Arrhythmia (Irregular)** subgroups.
+
+![Subgroup Analysis](supp_fig3_subgroup.png)
+
+*Observation: While baselines (e.g., Medformer) suffer significant performance drops on Arrhythmic subjects due to misalignment, ReTS preserves higher performance, confirming the efficacy of the flexible local window.*
+
+---
+
+## 4. Extended Analysis on Unified Training Strategy (UMTO)
 
 To further examine the architecture-optimization interaction mentioned in the Discussion section, we report additional UMTO variants on the PTB-XL dataset.
 
@@ -49,11 +75,9 @@ To further examine the architecture-optimization interaction mentioned in the Di
 | **UMTO (U1)** | **0.495 ± 0.025** | 0.510 ± 0.012 | Medformer gains (+2.3%), while ReTS performance drops (-3.8%), showing negative interference. |
 | **UMTO (U2)** | 0.495 ± 0.024 | 0.501 ± 0.008 | Removing focal loss improves ReTS stability slightly compared to U1, but it still underperforms EXP_ORIG. |
 
-**Conclusion:** These results confirm that aggressive unified optimization strategies (like UMTO) can interfere with the strong architectural inductive bias of ReTS in complex multi-label settings.
-
 ---
 
-## 3. Code Availability Statement
+## 5. Code Availability Statement
 
 The source code for the ST²-Encoder and the ReTS framework is currently being organized for intellectual property protection processes.
 
